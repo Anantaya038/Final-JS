@@ -1,7 +1,6 @@
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://admin:admin@ds121456.mlab.com:21456/fsinstadb";
 var db;
-
 MongoClient.connect(url, function (err, database) {
     if (err) throw err;
     db = database;
@@ -12,20 +11,20 @@ function getAllPosts(req, res) {
     var query = {};
 
     //POINT 4. Set sort the query by recently create_date
-    var sort = { create_date: -1}; 
+    var sort = {create_date: -1}; 
     db.collection("posts").find(query).sort(sort).toArray(function (err, result) {
         if (err) throw err;
-        console.log(result);
+        // console.log(result);
         res.json(result);
     });
 }
 
 function getPostsByUser(req, res) {
-    // Additional 1.
-    var query = { username: "test" }
-    console.log(query);
-    db.collection("posts").find(query).toArray(function (err, result) {
-        if (err) throw err;
+    // Additional 1.    
+    var query = {username : "Oly"};
+    var sort = {create_date: -1};
+    db.collection("posts").find(query).sort(sort).toArray(function (err, result) {
+    if (err) throw err;
         res.json(result);
     });
 
@@ -33,6 +32,7 @@ function getPostsByUser(req, res) {
 
 function insertNewPosts(req, res) {
     //Insert new data to mongoDB
+    
     var newpost = req.body;
     db.collection("posts").insertOne(newpost, function (err, result) {
         if (err) throw err;
